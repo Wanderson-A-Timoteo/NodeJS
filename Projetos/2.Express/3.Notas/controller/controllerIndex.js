@@ -17,3 +17,12 @@ exports.tela_principal = async function (req, res) {
   // renderiza o arquivo index.hbs, dentro da pasta view, e passa o contexto
   res.render('index', contexto);
 };
+
+// cria e já exporta a função que será responsável pela página Sobre
+exports.sobre = async function(req, res) {
+  let contexto = {
+    titulo_pagina: "Sobre o Aplicativo",
+  }
+  // renderiza o arquivo sobre.hbs, dentro da pasta view
+  res.render('sobre', contexto);
+}
