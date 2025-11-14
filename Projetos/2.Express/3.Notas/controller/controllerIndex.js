@@ -1,5 +1,3 @@
-// controller/controllerIndex.js
-
 // importação da classe que gerencia as notas na memória
 const notas = require('../model/notaMemoria.js');
 

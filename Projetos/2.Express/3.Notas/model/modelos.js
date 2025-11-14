@@ -1,5 +1,3 @@
-// model/modelos.js
-
 class Nota {
   // O construtor é onde as propriedades são inicializadas
   constructor(chave, titulo, texto) {

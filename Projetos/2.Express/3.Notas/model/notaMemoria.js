@@ -17,14 +17,12 @@ class NotaMemoria {
 
   async consulta(chave) {
     if (lista_notas[chave]) return lista_notas[chave];
-    // CORRIGIDO: Adicionado o '}' faltante
     else throw new Error(`Nota com a chave ${chave} não existe`);
   }
 
   async deleta(chave) {
     if (lista_notas[chave]) {
       delete lista_notas[chave];
-    // CORRIGIDO: Adicionado o '}' faltante
     } else throw new Error(`Nota com a chave ${chave} não existe`);
   }
 
