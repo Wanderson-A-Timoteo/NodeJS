@@ -8,4 +8,7 @@ router.get('/cria', controllerNota.cria_get);
 /* POST Cria Nota (recebe dados). */
 router.post('/cria', controllerNota.cria_post);
 
+/* GET Consulta Nota. */
+router.get('/consulta/:chave_nota', controllerNota.consulta);
+
 module.exports = router;
