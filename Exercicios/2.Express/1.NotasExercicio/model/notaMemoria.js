@@ -4,24 +4,24 @@ const lista_notas = {};
 
 class NotaMemoria {
 
-    // Atualiza agora recebe (e preserva) o status 'lida'
-    async atualiza(chave, titulo, texto, lida) {
+    // Atualiza agora recebe e preserva o status 'lida'
+    async atualiza(chave, titulo, texto, lida, importancia) {
         // Se 'lida' não for passado, mantém o valor antigo se existir, ou false
         let statusAtual = lista_notas[chave] ? lista_notas[chave].lida : false;
         if (lida !== undefined) {
             statusAtual = lida;
         }
 
-        var novaNota = new Nota(chave, titulo, texto);
-        novaNota.lida = statusAtual; // Define o status
+        var novaNota = new Nota(chave, titulo, texto, importancia);
+        novaNota.lida = statusAtual;
         
         lista_notas[chave] = novaNota;
         return lista_notas[chave];
     }
 
-    async cria(chave, titulo, texto) {
-        var novaNota = new Nota(chave, titulo, texto);
-        novaNota.lida = false; // Padrão: não lida [cite: 1751]
+    async cria(chave, titulo, texto, importancia) {
+        var novaNota = new Nota(chave, titulo, texto, importancia);
+        novaNota.lida = false; // Padrão: não lida
         lista_notas[chave] = novaNota;
         return lista_notas[chave];
     }

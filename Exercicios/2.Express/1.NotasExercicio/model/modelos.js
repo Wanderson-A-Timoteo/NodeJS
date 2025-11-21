@@ -1,9 +1,10 @@
 class Nota {
-  // O construtor é onde as propriedades são inicializadas
-  constructor(chave, titulo, texto) {
+  // Construtor
+  constructor(chave, titulo, texto, importancia) {
     this._chave = chave;
     this._titulo = titulo;
     this._texto = texto;
+    this._importancia = importancia || 1;
     this._lida = false;
   }
 
@@ -20,21 +21,29 @@ class Nota {
     return this._texto;
   }
 
+  get lida() {
+    return this._lida;
+  }
+
+  get importancia() { 
+    return this._importancia; 
+  }
+
   // Setters (para alterar os valores)
   set titulo(novoTitulo) {
     this._titulo = novoTitulo;
   }
-
+  
   set texto(novoTexto) {
     this._texto = novoTexto;
-  }
-
-  get lida() {
-    return this._lida;
   }
   
   set lida(status) {
     this._lida = status;
+  }
+  
+  set importancia(novoValor) { 
+    this._importancia = novoValor; 
   }
 }
 

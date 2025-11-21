@@ -18,9 +18,10 @@ exports.cria_post = async function(req, res) {
   var chave = req.body.chave;
   var titulo = req.body.titulo;
   var texto = req.body.texto;
+  var importancia = req.body.importancia;
 
   // cria a nota
-  await notas.cria(chave, titulo, texto);
+  await notas.cria(chave, titulo, texto, importancia);
 
   // redireciona para a página principal
   res.redirect('/');
@@ -37,7 +38,8 @@ exports.consulta = async function(req, res) {
     titulo_pagina: "Consulta a Nota",
     chave: nota.chave,
     titulo: nota.titulo,
-    texto: nota.texto
+    texto: nota.texto,
+    importancia: nota.importancia
   };
 
   // renderiza o arquivo dentro da pasta view
@@ -55,7 +57,8 @@ exports.altera_get = async function(req, res) {
     titulo_pagina: "Altera a Nota",
     chave: nota.chave,
     titulo: nota.titulo,
-    texto: nota.texto
+    texto: nota.texto,
+    importancia: nota.importancia
   };
 
   // renderiza o arquivo alteraNota.hbs, dentro da pasta view, com os dados da nota
@@ -68,12 +71,37 @@ exports.altera_post = async function(req, res) {
   var chave = req.body.chave;
   var titulo = req.body.titulo;
   var texto = req.body.texto;
+  var importancia = req.body.importancia;
+
+  // Precisamos buscar a nota original para saber o status 'lida'
+  var notaOriginal = await notas.consulta(chave);
 
   // atualiza a nota com a chave
-  await notas.atualiza(chave, titulo, texto);
+  await notas.atualiza(chave, titulo, texto, notaOriginal.lida, importancia);
 
   // redireciona para a página de consulta da nota
   res.redirect('/nota/consulta/' + chave);
+};
+
+
+// Marca a nota como lida
+exports.lida = async function(req, res) {
+  var chave = req.params.chave_nota;
+  // 1. Busca a nota para manter o titulo e texto originais
+  var nota = await notas.consulta(chave);
+  // 2. Atualiza passando true para o campo lida
+  await notas.atualiza(chave, nota.titulo, nota.texto, true, nota.importancia);
+  res.redirect('/');
+};
+
+// Marca a nota como não lida
+exports.naolida = async function(req, res) {
+  var chave = req.params.chave_nota;
+  // 1. Busca a nota
+  var nota = await notas.consulta(chave);
+  // 2. Atualiza passando false para o campo lida
+  await notas.atualiza(chave, nota.titulo, nota.texto, false, nota.importancia);
+  res.redirect('/');
 };
 
 // cria e já exporta a função que será responsável pela exclusão da nota
@@ -85,25 +113,5 @@ exports.deleta = async function(req, res) {
     await notas.deleta(chave);
     
     // redireciona para a página principal
-    res.redirect('/');
-};
-
-// Marca a nota como lida
-exports.lida = async function(req, res) {
-    var chave = req.params.chave_nota;
-    // 1. Busca a nota para manter o titulo e texto originais
-    var nota = await notas.consulta(chave);
-    // 2. Atualiza passando true para o campo lida
-    await notas.atualiza(chave, nota.titulo, nota.texto, true);
-    res.redirect('/');
-};
-
-// Marca a nota como não lida
-exports.naolida = async function(req, res) {
-    var chave = req.params.chave_nota;
-    // 1. Busca a nota
-    var nota = await notas.consulta(chave);
-    // 2. Atualiza passando false para o campo lida
-    await notas.atualiza(chave, nota.titulo, nota.texto, false);
     res.redirect('/');
 };
