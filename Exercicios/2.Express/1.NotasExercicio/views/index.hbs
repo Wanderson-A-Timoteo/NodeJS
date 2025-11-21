@@ -1,6 +1,7 @@
 <h1>Notas</h1>
 <p><a href="/">Home</a> | <a href="/sobre">Sobre</a> | <a href="/nota/cria">Criar Nota</a></p>
 
+{{#if notas.length}}
 <table border="1" style="width: 80%; margin: 20px auto; border-collapse: collapse;">
   <thead style="background-color: #cfe2ff; text-align: center;">
     <tr>
@@ -31,3 +32,8 @@
     {{/each}}
   </tbody>
 </table>
+{{else}}
+<br><br>
+<h3>Ainda não há nenhuma nota cadastrada.</h3>
+<p><a href="/nota/cria">Cadastre a sua primeira nota.</a></p>
+{{/if}}
