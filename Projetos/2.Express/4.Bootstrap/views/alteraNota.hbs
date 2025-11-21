@@ -1,17 +1,37 @@
-<h2>Alteração de nota de texto</h2>
-<form method='POST' action='/nota/altera/{{chave}}'>
-  <p><label for="chave">Chave</label></p>
-  <p><input type='text' name='chave' value="{{chave}}" size="30" readonly /></p>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2 class="mb-4">Alteração de nota</h2>
 
-  <p><label for="titulo">Título</label></p>
-  <p><input type='text' name='titulo' value="{{titulo}}" size="60" /></p>
+    <form method='POST' action='/nota/altera/{{chave}}'>
+      <div class="row mb-3">
+        <div class="col-md-8">
+          <label for="chave" class="form-label">Chave</label>
+          <input type="text" class="form-control" name="chave" id="chave" value="{{chave}}" readonly>
+        </div>
+        <div class="col-md-4">
+          <label for="importancia" class="form-label">Importância</label>
+          <input type="number" class="form-control" name="importancia" id="importancia" min="1" max="5"
+            value="{{importancia}}">
+        </div>
+      </div>
 
-  <p><label for="importancia">Importância da Nota</label></p>
-  <p><input type='number' name='importancia' min="1" max="5" value="{{importancia}}" /></p>
+      <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" class="form-control" name="titulo" id="titulo" value="{{titulo}}">
+      </div>
 
-  <p><label for="texto">Texto da Nota</label></p>
-  <p><textarea rows="5" cols="57" name='texto'>{{texto}}</textarea></p>
+      <div class="mb-4">
+        <label for="texto" class="form-label">Texto da Nota</label>
+        <textarea class="form-control" name="texto" id="texto" rows="5">{{texto}}</textarea>
+      </div>
 
-  <button type="submit">Alterar</button>
-  <a href="/nota/consulta/{{chave}}"><button type="button">Cancelar</button></a>
-</form>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="lidaCheck" disabled {{#if lida}}checked{{/if}}>
+        <label class="form-check-label" for="lidaCheck">Nota Lida</label>
+      </div>
+
+      <button type="submit" class="btn btn-success">Alterar</button>
+      <a href="/nota/consulta/{{chave}}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>

@@ -1,5 +1,4 @@
 <h1>Notas</h1>
-<p><a href="/">Home</a> | <a href="/sobre">Sobre</a> | <a href="/nota/cria">Criar Nota</a></p>
 
 {{#if notas.length}}
 <table class="table table-hover">
@@ -21,10 +20,15 @@
         <b><a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a></b>
         {{/if}}
       </td>
-      <td class="text-center"> {{#if this.lida}}
-        <a href="/nota/naolida/{{this.chave}}" class="btn btn-outline-secondary btn-sm">Marcar como Não Lida</a>
+      <td class="text-center">
+        {{#if this.lida}}
+        <a href="/nota/naolida/{{this.chave}}" class="btn btn-outline-secondary btn-sm" title="Marcar como Não Lida">
+          <i class="bi bi-envelope-open"></i>
+        </a>
         {{else}}
-        <a href="/nota/lida/{{this.chave}}" class="btn btn-primary btn-sm">Marcar como Lida</a>
+        <a href="/nota/lida/{{this.chave}}" class="btn btn-primary btn-sm" title="Marcar como Lida">
+          <i class="bi bi-envelope-fill"></i>
+        </a>
         {{/if}}
       </td>
     </tr>
