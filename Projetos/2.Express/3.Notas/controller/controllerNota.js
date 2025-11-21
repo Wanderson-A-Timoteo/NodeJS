@@ -75,3 +75,15 @@ exports.altera_post = async function(req, res) {
   // redireciona para a página de consulta da nota
   res.redirect('/nota/consulta/' + chave);
 };
+
+// cria e já exporta a função que será responsável pela exclusão da nota
+exports.deleta = async function(req, res) {
+    //informação passada como parâmetro na url
+    var chave = req.params.chave_nota;
+    
+    // chama o método do model para deletar
+    await notas.deleta(chave);
+    
+    // redireciona para a página principal
+    res.redirect('/');
+};

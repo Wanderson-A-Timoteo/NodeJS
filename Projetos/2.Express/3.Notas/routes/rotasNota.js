@@ -17,4 +17,7 @@ router.get('/altera/:chave_nota', controllerNota.altera_get);
 /* POST Altera Nota (recebe dados). */
 router.post('/altera/:chave_nota', controllerNota.altera_post);
 
+/* GET Deleta Nota. */
+router.get('/deleta/:chave_nota', controllerNota.deleta);
+
 module.exports = router;
