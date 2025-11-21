@@ -43,3 +43,35 @@ exports.consulta = async function(req, res) {
   // renderiza o arquivo dentro da pasta view
   res.render('consultaNota', contexto);
 };
+
+// cria e já exporta a função que será responsável pela alteração de nota (GET)
+exports.altera_get = async function(req, res) {
+  //informação passada como parâmetro na url
+  var chave = req.params.chave_nota;
+  var nota = await notas.consulta(chave); // Busca a nota existente
+
+  // Prepara o contexto para a view
+  let contexto = {
+    titulo_pagina: "Altera a Nota",
+    chave: nota.chave,
+    titulo: nota.titulo,
+    texto: nota.texto
+  };
+
+  // renderiza o arquivo alteraNota.hbs, dentro da pasta view, com os dados da nota
+  res.render('alteraNota', contexto);
+};
+
+// cria e já exporta a função que será responsável pela alteração de nota (POST)
+exports.altera_post = async function(req, res) {
+  // obtem as informações do formulário
+  var chave = req.body.chave;
+  var titulo = req.body.titulo;
+  var texto = req.body.texto;
+
+  // atualiza a nota com a chave
+  await notas.atualiza(chave, titulo, texto);
+
+  // redireciona para a página de consulta da nota
+  res.redirect('/nota/consulta/' + chave);
+};
