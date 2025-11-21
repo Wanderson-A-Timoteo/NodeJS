@@ -1,0 +1,33 @@
+<h1>Notas</h1>
+<p><a href="/">Home</a> | <a href="/sobre">Sobre</a> | <a href="/nota/cria">Criar Nota</a></p>
+
+<table border="1" style="width: 80%; margin: 20px auto; border-collapse: collapse;">
+  <thead style="background-color: #cfe2ff; text-align: center;">
+    <tr>
+      <th>Chave</th>
+      <th>Título</th>
+      <th>Status / Ação</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each notas}}
+    <tr>
+      <td style="padding: 10px;">{{this.chave}}</td>
+      <td style="padding: 10px;">
+        {{#if this.lida}}
+        <a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a>
+        {{else}}
+        <b><a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a></b>
+        {{/if}}
+      </td>
+      <td style="padding: 10px; text-align: center;">
+        {{#if this.lida}}
+        <a href="/nota/naolida/{{this.chave}}">Marcar como Não Lida</a>
+        {{else}}
+        <a href="/nota/lida/{{this.chave}}">Marcar como Lida</a>
+        {{/if}}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
