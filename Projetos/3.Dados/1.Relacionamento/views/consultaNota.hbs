@@ -1,0 +1,37 @@
+<div class="card mt-4">
+  <div class="card-header">
+    Consulta a Informações da Nota
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{titulo}}</h5>
+    <p class="card-text">{{texto}}</p>
+
+    <hr>
+    <p class="card-text"><small class="text-muted">Chave: {{id}} | Importância: {{importancia}}</small></p>
+
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalExclusao">
+      Deletar
+    </button>
+
+    <a href="/nota/altera/{{id}}" class="btn btn-success">Alterar</a>
+    <a href="/" class="btn btn-secondary">Voltar</a>
+  </div>
+</div>
+
+<div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Exclusão de Nota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja realmente excluir a nota <strong>"{{titulo}}"</strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a href="/nota/deleta/{{id}}" class="btn btn-danger">Excluir</a>
+      </div>
+    </div>
+  </div>
+</div>
