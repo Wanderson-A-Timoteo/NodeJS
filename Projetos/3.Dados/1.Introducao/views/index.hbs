@@ -12,21 +12,21 @@
   <tbody>
     {{#each notas}}
     <tr>
-      <td>{{this.chave}}</td>
+      <td>{{this.id}}</td>
       <td>
         {{#if this.lida}}
-        <a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a>
+        <a href="/nota/consulta/{{this.id}}">{{this.titulo}}</a>
         {{else}}
-        <b><a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a></b>
+        <b><a href="/nota/consulta/{{this.id}}">{{this.titulo}}</a></b>
         {{/if}}
       </td>
       <td class="text-center">
         {{#if this.lida}}
-        <a href="/nota/naolida/{{this.chave}}" class="btn btn-outline-secondary btn-sm" title="Marcar como Não Lida">
+        <a href="/nota/naolida/{{this.id}}" class="btn btn-outline-secondary btn-sm" title="Marcar como Não Lida">
           <i class="bi bi-envelope-open"></i>
         </a>
         {{else}}
-        <a href="/nota/lida/{{this.chave}}" class="btn btn-primary btn-sm" title="Marcar como Lida">
+        <a href="/nota/lida/{{this.id}}" class="btn btn-primary btn-sm" title="Marcar como Lida">
           <i class="bi bi-envelope-fill"></i>
         </a>
         {{/if}}

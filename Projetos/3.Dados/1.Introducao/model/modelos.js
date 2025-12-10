@@ -41,7 +41,7 @@ Nota.init(
 );
 
 // Cria a tabela no banco se não existir
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ alter: true }).then(() => { // alter: true para aplicar alterações de código no BD
     console.log('Modelos sincronizados com o banco de dados.');
 }).catch((error) => {
     console.error('Erro ao sincronizar modelos com o banco de dados:', error);

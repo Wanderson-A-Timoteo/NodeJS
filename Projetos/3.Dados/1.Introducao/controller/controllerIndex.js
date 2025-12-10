@@ -1,26 +1,30 @@
-// importação da classe que gerencia as notas na memória
-const notas = require('../model/notaMemoria.js');
+const Nota = require('../model/modelos'); // Importa o modelo do Sequelize
 
-// cria e já exporta a função que será responsável pela tela principal
-exports.tela_principal = async function (req, res) {
-  //nota criada para teste
-  // await notas.cria('nota_1', "Olá Mundo, Notas", "Esta é uma nota para testar as funcionalidades da aplicação de notas.");
+// Crie e já exporta a função que será responsável por renderizar a tela principal
+exports.tela_principal = async function(req, res) {
+    try {
+        // Busca todas as notas no banco de dados (SELECT * FROM Nota), utilizando Sequelize
+        const notas = await Nota.findAll();
 
-  // Prepara o "contexto" para enviar para a View
-  let contexto = {
-    titulo_pagina: "Gerenciador de Notas de Texto",
-    notas: await notas.lista(),
-  };
+        // Converte os dados do Sequelize para objetos simples que o Handlebars entende
+        // O método .map percorre a lista e o .get({ plain: true }) limpa os metadados
+        const notasSimples = notas.map(nota => nota.get({ plain: true }));
 
-  // renderiza o arquivo index.hbs, dentro da pasta view, e passa o contexto
-  res.render('index', contexto);
+        const contexto = {
+            titulo_pagina: "Gerenciador de Notas de Texto",
+            notas: notasSimples
+        };
+
+        // Renderiza a view 'index.hbs'
+        res.render('index', contexto);
+
+    } catch (error) {
+        console.error("Erro ao carregar notas:", error);
+        res.status(500).send("Erro ao buscar notas no banco de dados.");
+    }
 };
 
-// cria e já exporta a função que será responsável pela página Sobre
-exports.sobre = async function(req, res) {
-  let contexto = {
-    titulo_pagina: "Sobre o Aplicativo",
-  }
-  // renderiza o arquivo sobre.hbs, dentro da pasta view
-  res.render('sobre', contexto);
-}
+// Mantém a função 'sobre'sem alterações
+exports.sobre = function(req, res) {
+    res.render('sobre', { titulo_pagina: "Sobre" });
+};
