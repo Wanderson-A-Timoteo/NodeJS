@@ -71,70 +71,87 @@ exports.consulta = async function(req, res) {
 
 // cria e já exporta a função que será responsável pela alteração de nota (GET)
 exports.altera_get = async function(req, res) {
-  //informação passada como parâmetro na url
-  var chave = req.params.chave_nota;
-  var nota = await notas.consulta(chave); // Busca a nota existente
+    try {
+        const id = req.params.id;
+        const nota = await Nota.findByPk(id);
 
-  // Prepara o contexto para a view
-  let contexto = {
-    titulo_pagina: "Altera a Nota",
-    chave: nota.chave,
-    titulo: nota.titulo,
-    texto: nota.texto,
-    importancia: nota.importancia
-  };
-
-  // renderiza o arquivo alteraNota.hbs, dentro da pasta view, com os dados da nota
-  res.render('alteraNota', contexto);
+        if (nota) {
+            const contexto = {
+                titulo_pagina: "Altera a Nota",
+                id: nota.id,
+                titulo: nota.titulo,
+                texto: nota.texto,
+                importancia: nota.importancia,
+                lida: nota.lida
+            };
+            res.render('alteraNota', contexto);
+        } else {
+            res.redirect('/');
+        }
+    } catch (error) {
+        console.error("Erro ao buscar para editar:", error);
+        res.redirect('/');
+    }
 };
 
 // cria e já exporta a função que será responsável pela alteração de nota (POST)
 exports.altera_post = async function(req, res) {
-  // obtem as informações do formulário
-  var chave = req.body.chave;
-  var titulo = req.body.titulo;
-  var texto = req.body.texto;
-  var importancia = req.body.importancia;
+    try {
+        const id = req.params.id; // O ID vem da URL
+        
+        const nota_atualizada = {
+            titulo: req.body.titulo,
+            texto: req.body.texto,
+            importancia: Number(req.body.importancia),
+            // O checkbox envia 'on' se marcado, ou undefined se desmarcado
+            lida: req.body.status === 'on' ? true : false 
+        }
 
-  // Precisamos buscar a nota original para saber o status 'lida'
-  var notaOriginal = await notas.consulta(chave);
+        await Nota.update(nota_atualizada, { where: { id: id } });
+        res.redirect('/');
 
-  // atualiza a nota com a chave
-  await notas.atualiza(chave, titulo, texto, notaOriginal.lida, importancia);
-
-  // redireciona para a página de consulta da nota
-  res.redirect('/nota/consulta/' + chave);
+    } catch (error) {
+        console.error("Erro ao salvar edição:", error);
+        res.status(500).send("Erro ao editar nota");
+    }
 };
 
 
 // Marca a nota como lida
 exports.lida = async function(req, res) {
-  var chave = req.params.chave_nota;
-  // 1. Busca a nota para manter o titulo e texto originais
-  var nota = await notas.consulta(chave);
-  // 2. Atualiza passando true para o campo lida
-  await notas.atualiza(chave, nota.titulo, nota.texto, true, nota.importancia);
-  res.redirect('/');
+    try {
+        const id = req.params.id;
+        // Atualiza apenas o campo 'lida' para true
+        await Nota.update({ lida: true }, { where: { id: id } });
+        res.redirect('/');
+    } catch (error) {
+        console.error("Erro ao marcar como lida:", error);
+        res.redirect('/');
+    }
 };
 
 // Marca a nota como não lida
 exports.naolida = async function(req, res) {
-  var chave = req.params.chave_nota;
-  // 1. Busca a nota
-  var nota = await notas.consulta(chave);
-  // 2. Atualiza passando false para o campo lida
-  await notas.atualiza(chave, nota.titulo, nota.texto, false, nota.importancia);
-  res.redirect('/');
+    try {
+        const id = req.params.id;
+        // Atualiza apenas o campo 'lida' para false
+        await Nota.update({ lida: false }, { where: { id: id } });
+        res.redirect('/');
+    } catch (error) {
+        console.error("Erro ao marcar como não lida:", error);
+        res.redirect('/');
+    }
 };
 
 // cria e já exporta a função que será responsável pela exclusão da nota
 exports.deleta = async function(req, res) {
-    //informação passada como parâmetro na url
-    var chave = req.params.chave_nota;
-    
-    // chama o método do model para deletar
-    await notas.deleta(chave);
-    
-    // redireciona para a página principal
-    res.redirect('/');
+    try {
+        const id = req.params.id;
+        // Remove o registro onde o ID corresponde
+        await Nota.destroy({ where: { id: id } });
+        res.redirect('/');
+    } catch (error) {
+        console.error("Erro ao deletar:", error);
+        res.redirect('/');
+    }
 };

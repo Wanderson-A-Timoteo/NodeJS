@@ -2,11 +2,11 @@
   <div class="col-md-8">
     <h2 class="mb-4">Alteração de nota</h2>
 
-    <form method='POST' action='/nota/altera/{{chave}}'>
+    <form method='POST' action='/nota/altera/{{id}}'>
       <div class="row mb-3">
         <div class="col-md-8">
-          <label for="chave" class="form-label">Chave</label>
-          <input type="text" class="form-control" name="chave" id="chave" value="{{chave}}" readonly>
+          <label for="id" class="form-label">Chave</label>
+          <input type="text" class="form-control" name="id" id="id" value="{{id}}" readonly>
         </div>
         <div class="col-md-4">
           <label for="importancia" class="form-label">Importância</label>
@@ -31,7 +31,7 @@
       </div>
 
       <button type="submit" class="btn btn-success">Alterar</button>
-      <a href="/nota/consulta/{{chave}}" class="btn btn-secondary">Cancelar</a>
+      <a href="/nota/consulta/{{id}}" class="btn btn-secondary">Cancelar</a>
     </form>
   </div>
 </div>
