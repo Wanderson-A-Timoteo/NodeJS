@@ -1,0 +1,42 @@
+<h1>Notas</h1>
+
+{{#if notas.length}}
+<table class="table table-hover">
+  <thead class="table-primary text-center">
+    <tr>
+      <th>Chave</th>
+      <th>Título</th>
+      <th>Status / Ação</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each notas}}
+    <tr>
+      <td>{{this.chave}}</td>
+      <td>
+        {{#if this.lida}}
+        <a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a>
+        {{else}}
+        <b><a href="/nota/consulta/{{this.chave}}">{{this.titulo}}</a></b>
+        {{/if}}
+      </td>
+      <td class="text-center">
+        {{#if this.lida}}
+        <a href="/nota/naolida/{{this.chave}}" class="btn btn-outline-secondary btn-sm" title="Marcar como Não Lida">
+          <i class="bi bi-envelope-open"></i>
+        </a>
+        {{else}}
+        <a href="/nota/lida/{{this.chave}}" class="btn btn-primary btn-sm" title="Marcar como Lida">
+          <i class="bi bi-envelope-fill"></i>
+        </a>
+        {{/if}}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{else}}
+<br><br>
+<h3>Ainda não há nenhuma nota cadastrada.</h3>
+<p><a href="/nota/cria">Cadastre a sua primeira nota.</a></p>
+{{/if}}
