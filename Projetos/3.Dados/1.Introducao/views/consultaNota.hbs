@@ -7,13 +7,13 @@
     <p class="card-text">{{texto}}</p>
 
     <hr>
-    <p class="card-text"><small class="text-muted">Chave: {{chave}} | Importância: {{importancia}}</small></p>
+    <p class="card-text"><small class="text-muted">Chave: {{id}} | Importância: {{importancia}}</small></p>
 
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalExclusao">
       Deletar
     </button>
 
-    <a href="/nota/altera/{{chave}}" class="btn btn-success">Alterar</a>
+    <a href="/nota/altera/{{id}}" class="btn btn-success">Alterar</a>
     <a href="/" class="btn btn-secondary">Voltar</a>
   </div>
 </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <a href="/nota/deleta/{{chave}}" class="btn btn-danger">Excluir</a>
+        <a href="/nota/deleta/{{id}}" class="btn btn-danger">Excluir</a>
       </div>
     </div>
   </div>

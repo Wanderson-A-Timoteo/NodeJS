@@ -34,21 +34,39 @@ exports.cria_post = async function(req, res) {
 
 // cria e já exporta a função que será responsável pela consulta a nota
 exports.consulta = async function(req, res) {
-  //informação passada como parâmetro na url
-  var chave = req.params.chave_nota;
-  var nota = await notas.consulta(chave); // Chama o model
+    try {
+        // Pega o ID que vem na URL (ex: /nota/consulta/1)
+        const id = req.params.id;
 
-  // Prepara o contexto para a view
-  let contexto = {
-    titulo_pagina: "Consulta a Nota",
-    chave: nota.chave,
-    titulo: nota.titulo,
-    texto: nota.texto,
-    importancia: nota.importancia
-  };
+        // Busca a nota no banco pelo ID (Primary Key)
+        const nota = await Nota.findByPk(id);
 
-  // renderiza o arquivo dentro da pasta view
-  res.render('consultaNota', contexto);
+        // Se a nota existir, atualiza ela como lida e mostra na tela
+        if (nota) {
+            // Atualiza o status para lida: true
+            await Nota.update(
+                { lida: true },
+                { where: { id: id } }
+            );
+
+            const contexto = {
+                titulo_pagina: "Consulta a Nota",
+                id: nota.id,
+                titulo: nota.titulo,
+                texto: nota.texto,
+                importancia: nota.importancia,
+                lida: true
+            };
+
+            res.render('consultaNota', contexto);
+        } else {
+            res.status(404).send("Nota não encontrada");
+        }
+
+    } catch (error) {
+        console.error("Erro na consulta:", error);
+        res.status(500).send("Erro ao consultar nota.");
+    }
 };
 
 // cria e já exporta a função que será responsável pela alteração de nota (GET)
