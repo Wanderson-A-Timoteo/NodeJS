@@ -1,51 +1,50 @@
-class Nota {
-  // Construtor
-  constructor(chave, titulo, texto, importancia) {
-    this._chave = chave;
-    this._titulo = titulo;
-    this._texto = texto;
-    this._importancia = importancia || 1;
-    this._lida = false;
-  }
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('./server.js'); // Importa a nossa conexão configurada
 
-  // Getters (para ler os valores)
-  get chave() {
-    return this._chave;
-  }
+class Nota extends Model { } // Cria a classe herdando de 'Model'
 
-  get titulo() {
-    return this._titulo;
+Nota.init(
+  // Definição das Colunas (Atributos)
+  {
+    // O ID agora é gerenciado pelo banco (Auto Increment)
+    id: { 
+        type: DataTypes.INTEGER, 
+        primaryKey: true, 
+        autoIncrement: true, 
+        allowNull: false 
+    },
+    titulo: { 
+        type: DataTypes.STRING, 
+        unique: true, // Não permite títulos repetidos
+        allowNull: false 
+    },
+    texto: { 
+        type: DataTypes.TEXT, 
+        allowNull: false 
+    },
+    importancia: { 
+        type: DataTypes.INTEGER, 
+        allowNull: false 
+    },
+    lida: { 
+        type: DataTypes.BOOLEAN, 
+        defaultValue: false 
+    }
+  },
+  // Configurações do Modelo
+  { 
+    sequelize, // A instância da conexão
+    freezeTableName: true, // Força o nome da tabela a ser 'Nota' (sem pluralizar automáticamente como professor disse)
+    createdAt: 'criada_em',
+    updatedAt: 'atualizada_em',
   }
+);
 
-  get texto() {
-    return this._texto;
-  }
+// Cria a tabela no banco se não existir
+sequelize.sync({ alter: true }).then(() => {
+    console.log('Modelos sincronizados com o banco de dados.');
+}).catch((error) => {
+    console.error('Erro ao sincronizar modelos com o banco de dados:', error);
+});
 
-  get lida() {
-    return this._lida;
-  }
-
-  get importancia() { 
-    return this._importancia; 
-  }
-
-  // Setters (para alterar os valores)
-  set titulo(novoTitulo) {
-    this._titulo = novoTitulo;
-  }
-  
-  set texto(novoTexto) {
-    this._texto = novoTexto;
-  }
-  
-  set lida(status) {
-    this._lida = status;
-  }
-  
-  set importancia(novoValor) { 
-    this._importancia = novoValor; 
-  }
-}
-
-// Exporta a classe para que outros arquivos (como o notaMemoria) possam usá-la
 module.exports = Nota;
