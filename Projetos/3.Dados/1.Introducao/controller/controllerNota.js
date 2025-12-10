@@ -1,30 +1,35 @@
-// importação da classe que gerencia as notas na memória
-const notas = require('../model/notaMemoria.js');
+const Nota = require('../model/modelos');
 
-// cria e já exporta a função que será responsável pela criação de nota (GET)
-// Esta função trata a requisição GET, por isso o nome cria_get
-exports.cria_get = async function(req, res) {
-  let contexto = {
-    titulo_pagina: "Criação de Nota",
-  }
-  // renderiza o arquivo criaNota.hbs, dentro da pasta view
-  res.render('criaNota', contexto);
-}
+// A função GET apenas mostra o formulário
+exports.cria_get = function(req, res) {
+    contexto = {
+        titulo_pagina: "Criação de uma nova nota"
+    }
+    res.render('criaNota', contexto);
+};
 
-// cria e já exporta a função que será responsável pela criação de nota (POST)
+// A função POST agora salva no banco
 exports.cria_post = async function(req, res) {
-  // obtém as informações do formulário
-  // O Express coloca os dados do POST em req.body
-  var chave = req.body.chave;
-  var titulo = req.body.titulo;
-  var texto = req.body.texto;
-  var importancia = req.body.importancia;
+    try {
+        // Cria o objeto com os dados do formulário
+        const nova_nota = {
+            titulo: req.body.titulo,
+            texto: req.body.texto,
+            importancia: Number(req.body.importancia),
+            // O campo 'lida' tem valor padrão false no banco, não precisamos passar
+            // O campo 'id' é auto-incremento, o banco gera sozinho
+        }
 
-  // cria a nota
-  await notas.cria(chave, titulo, texto, importancia);
+        // Salva no banco de dados
+        await Nota.create(nova_nota);
 
-  // redireciona para a página principal
-  res.redirect('/');
+        // Redireciona para a home
+        res.redirect('/');
+        
+    } catch (error) {
+        console.error("Erro ao criar nota:", error);
+        res.status(500).send("Erro ao salvar nota.");
+    }
 };
 
 // cria e já exporta a função que será responsável pela consulta a nota
