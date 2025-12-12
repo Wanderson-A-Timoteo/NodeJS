@@ -1,5 +1,5 @@
 const { Nota } = require('../model/modelos');
-const { Op } = require('sequelize'); // Importante: Operadores de busca
+const { Op } = require('sequelize'); // Operadores de busca
 
 exports.tela_principal = async function(req, res) {
     try {
@@ -36,4 +36,28 @@ exports.tela_principal = async function(req, res) {
 
 exports.sobre = function(req, res) {
     res.render('sobre', { titulo_pagina: "Sobre" });
+};
+
+// --- NOTAS IMPORTANTES ---
+exports.importantes = async function(req, res) {
+    try {
+        // Busca notas com importância 4 ou 5
+        const notas = await Nota.findAll({
+            where: {
+                importancia: { [Op.gte]: 4 } // >= 4
+            },
+            order: [['importancia', 'DESC']] // Ordena da maior para a menor
+        });
+
+        const notasSimples = notas.map(nota => nota.get({ plain: true }));
+
+        res.render('importantes', {
+            titulo_pagina: "Notas com Maior Importância",
+            notas: notasSimples
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar importantes:", error);
+        res.status(500).send("Erro ao buscar notas importantes");
+    }
 };

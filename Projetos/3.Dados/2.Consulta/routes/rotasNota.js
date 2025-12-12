@@ -1,35 +1,26 @@
 var express = require('express');
 var router = express.Router();
-var controllerNota = require('../controller/controllerNota.js');
+var controllerNota = require('../controller/controllerNota');
 
-// Gerar Dados de Teste
+// Rota para Gerar Dados
 router.get('/gerar', controllerNota.criarDados);
 
-/* GET Cria Nota (formulário). */
-router.get('/cria', controllerNota.cria_get);
+// Rota para Relatórios
+router.get('/relatorio', controllerNota.relatorios);
 
-/* POST Cria Nota (recebe dados). */
+// --- ROTA DE NOTAS IMPORTANTES ---
+router.get('/importantes', controllerNota.importantes);
+
+// Rotas de Criação
+router.get('/cria', controllerNota.cria_get);
 router.post('/cria', controllerNota.cria_post);
 
-/* GET Consulta Nota. */
+// Rotas de Consulta, Edição e Exclusão
 router.get('/consulta/:id', controllerNota.consulta);
-
-/* GET Altera Nota (formulário). */
-router.get('/altera/:id', controllerNota.altera_get);
-
-/* POST Altera Nota (recebe dados). */
-router.post('/altera/:id', controllerNota.altera_post);
-
-/* GET Deleta Nota. */
-router.get('/deleta/:id', controllerNota.deleta);
-
-/* GET Marcar como Lida */
 router.get('/lida/:id', controllerNota.lida);
-
-/* GET Marcar como Não Lida */
 router.get('/naolida/:id', controllerNota.naolida);
-
-// GET Relatório
-router.get('/relatorio', controllerNota.relatorios);
+router.get('/altera/:id', controllerNota.altera_get);
+router.post('/altera/:id', controllerNota.altera_post);
+router.get('/deleta/:id', controllerNota.deleta);
 
 module.exports = router;
