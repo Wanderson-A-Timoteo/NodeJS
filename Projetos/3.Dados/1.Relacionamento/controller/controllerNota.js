@@ -1,38 +1,93 @@
-const Nota = require('../model/modelos');
+const { Nota, Usuario, Tag } = require('../model/modelos');
+
+// Função cria dados de teste no banco
+exports.criarDados = async function(req, res) {
+    try {
+        // Criar Usuários
+        const users = await Usuario.bulkCreate([
+            { nome: "Alice", sobrenome: "Costa", email: "alice@email.com.br" },
+            { nome: "Ricardo", sobrenome: "Silva", email: "ricardo@email.com.br" },
+            { nome: "Mariana", sobrenome: "Oliveira", email: "mariana@email.com.br" }
+        ]);
+
+        // Criar Tags
+        const tags = await Tag.bulkCreate([
+            { tag: "Trabalho", cor: "#0dbeffff" },
+            { tag: "Pessoal", cor: "#ffc043ff" },
+            { tag: "Urgente", cor: "#ff3033ff" }
+        ]);
+
+        // Criar Notas e Associar
+        // Nota 1 (Alice)
+        const n1 = await Nota.create({ titulo: "Comprar mantimentos", texto: "Leite, pão, ovos...", importancia: 1, usuario_id: 1 });
+        await n1.addTag(tags[1]); // Pessoal
+
+        // Nota 2 (Alice)
+        const n2 = await Nota.create({ titulo: "Reunião com a equipe", texto: "Discutir progresso...", importancia: 5, usuario_id: 1 });
+        await n2.addTags([tags[0], tags[2]]); // Trabalho, Urgente
+
+        // Nota 3 (Alice)
+        const n3 = await Nota.create({ titulo: "Ligar para o encanador", texto: "Vazamento na cozinha", importancia: 4, usuario_id: 1 });
+        await n3.addTags([tags[1], tags[2]]); // Pessoal, Urgente
+
+        // Nota 4 (Ricardo)
+        const n4 = await Nota.create({ titulo: "Consulta médica", texto: "Check-up anual", importancia: 4, usuario_id: 2 });
+        await n4.addTag(tags[1]); // Pessoal
+
+        // Nota 5 (Ricardo)
+        const n5 = await Nota.create({ titulo: "Preparar apresentação", texto: "Slides conferência", importancia: 5, usuario_id: 2 });
+        await n5.addTag(tags[0]); // Trabalho
+
+        // Nota 6 (Ricardo)
+        const n6 = await Nota.create({ titulo: "Renovar seguro do carro", texto: "Verificar opções", importancia: 3, usuario_id: 2 });
+        await n6.addTag(tags[2]); // Urgente
+
+        // Nota 7 (Mariana)
+        const n7 = await Nota.create({ titulo: "Planejar viagem", texto: "Reservar voos", importancia: 2, usuario_id: 3 });
+        await n7.addTag(tags[1]); // Pessoal
+
+        // Nota 8 (Mariana)
+        const n8 = await Nota.create({ titulo: "Pagar contas", texto: "Energia, água...", importancia: 4, usuario_id: 3 });
+        await n8.addTag(tags[2]); // Urgente
+
+        // Nota 9 (Mariana)
+        const n9 = await Nota.create({ titulo: "Aula de yoga", texto: "Participar online", importancia: 1, usuario_id: 3 });
+        await n9.addTag(tags[1]); // Pessoal
+
+        res.redirect('/');
+
+    } catch (error) {
+        console.error("Erro ao gerar dados:", error);
+        res.status(500).send("Erro ao gerar dados de teste: " + error.message);
+    }
+};
+
 
 // A função GET apenas mostra o formulário
 exports.cria_get = function(req, res) {
-    contexto = {
-        titulo_pagina: "Criação de uma nova nota"
-    }
-    res.render('criaNota', contexto);
+    res.render('criaNota', { titulo_pagina: "Criação de uma nova nota" });
 };
 
 // A função POST agora salva no banco
 exports.cria_post = async function(req, res) {
     try {
-        // Cria o objeto com os dados do formulário
+        // ATENÇÃO: Hardcoded usuario_id: 1 (Alice) por enquanto, 
+        // pois a tela de criação ainda não seleciona usuário.
         const nova_nota = {
             titulo: req.body.titulo,
             texto: req.body.texto,
             importancia: Number(req.body.importancia),
-            // O campo 'lida' tem valor padrão false no banco, não precisamos passar
-            // O campo 'id' é auto-incremento, o banco gera sozinho
+            usuario_id: 1 
         }
-
-        // Salva no banco de dados
         await Nota.create(nova_nota);
-
-        // Redireciona para a home
         res.redirect('/');
-        
     } catch (error) {
-        console.error("Erro ao criar nota:", error);
-        res.status(500).send("Erro ao salvar nota.");
+        console.error("Erro ao criar:", error);
+        res.status(500).send("Erro ao criar nota");
     }
 };
 
-// cria e já exporta a função que será responsável pela consulta a nota
+// Cria e já exporta a função que será responsável pela consulta a nota
 exports.consulta = async function(req, res) {
     try {
         // Pega o ID que vem na URL (ex: /nota/consulta/1)
@@ -69,7 +124,7 @@ exports.consulta = async function(req, res) {
     }
 };
 
-// cria e já exporta a função que será responsável pela alteração de nota (GET)
+// Cria e já exporta a função que será responsável pela alteração de nota (GET)
 exports.altera_get = async function(req, res) {
     try {
         const id = req.params.id;
@@ -94,7 +149,7 @@ exports.altera_get = async function(req, res) {
     }
 };
 
-// cria e já exporta a função que será responsável pela alteração de nota (POST)
+// Cria e já exporta a função que será responsável pela alteração de nota (POST)
 exports.altera_post = async function(req, res) {
     try {
         const id = req.params.id; // O ID vem da URL
@@ -143,7 +198,7 @@ exports.naolida = async function(req, res) {
     }
 };
 
-// cria e já exporta a função que será responsável pela exclusão da nota
+// Cria e já exporta a função que será responsável pela exclusão da nota
 exports.deleta = async function(req, res) {
     try {
         const id = req.params.id;

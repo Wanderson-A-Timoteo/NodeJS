@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var controllerNota = require('../controller/controllerNota.js');
 
+// Gerar Dados de Teste
+router.get('/gerar', controllerNota.criarDados);
+
 /* GET Cria Nota (formulário). */
 router.get('/cria', controllerNota.cria_get);
 

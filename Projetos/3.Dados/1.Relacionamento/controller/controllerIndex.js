@@ -1,4 +1,4 @@
-const Nota = require('../model/modelos'); // Importa o modelo do Sequelize
+const { Nota } = require('../model/modelos');
 
 // Crie e já exporta a função que será responsável por renderizar a tela principal
 exports.tela_principal = async function(req, res) {

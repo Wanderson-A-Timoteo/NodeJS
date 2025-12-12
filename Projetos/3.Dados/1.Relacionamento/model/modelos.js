@@ -70,9 +70,8 @@ Tag.belongsToMany(Nota, {
 });
 
 // Sincronização
-// force: true -> Apaga as tabelas antigas e cria novas
-// Usamos isso agora para garantir que a estrutura nova seja criada limpa.
-sequelize.sync({ force: true }).then(() => {
+// alter: true -> Altera a tabela existente para corresponder ao modelo.
+sequelize.sync({ alter: true }).then(() => {
     console.log('Modelos sincronizados com o banco de dados.');
 }).catch((error) => {
     console.error('Erro ao sincronizar:', error);
