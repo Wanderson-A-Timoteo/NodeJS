@@ -1,8 +1,21 @@
 const { Nota, Usuario, Tag } = require('../model/modelos');
 
-// Função cria dados de teste no banco
+// Função para gerar dados de teste
 exports.criarDados = async function(req, res) {
     try {
+        // --- 1. LIMPEZA DOS DADOS ANTIGOS ---
+        
+        // Apaga todas as notas (Isso limpa a tabela intermediária Nota_Tag automaticamente)
+        await Nota.destroy({ where: {} });
+        
+        // Apaga todas as tags
+        await Tag.destroy({ where: {} });
+        
+        // Apaga todos os usuários
+        await Usuario.destroy({ where: {} });
+
+        // --- 2. CRIAÇÃO DOS NOVOS DADOS ---
+
         // Criar Usuários
         const users = await Usuario.bulkCreate([
             { nome: "Alice", sobrenome: "Costa", email: "alice@email.com.br" },
@@ -12,53 +25,55 @@ exports.criarDados = async function(req, res) {
 
         // Criar Tags
         const tags = await Tag.bulkCreate([
-            { tag: "Trabalho", cor: "#0dbeffff" },
-            { tag: "Pessoal", cor: "#ffc043ff" },
-            { tag: "Urgente", cor: "#ff3033ff" }
+            { tag: "Trabalho", cor: "#0dbeffff" }, // tags[0]
+            { tag: "Pessoal", cor: "#ffc043ff" },  // tags[1]
+            { tag: "Urgente", cor: "#ff3033ff" }   // tags[2]
         ]);
 
         // Criar Notas e Associar
+        // Pegar os IDs reais gerados (users[0].id, etc.)
+        
         // Nota 1 (Alice)
-        const n1 = await Nota.create({ titulo: "Comprar mantimentos", texto: "Leite, pão, ovos...", importancia: 1, usuario_id: 1 });
+        const n1 = await Nota.create({ titulo: "Comprar mantimentos", texto: "Leite, pão, ovos...", importancia: 1, usuario_id: users[0].id });
         await n1.addTag(tags[1]); // Pessoal
 
         // Nota 2 (Alice)
-        const n2 = await Nota.create({ titulo: "Reunião com a equipe", texto: "Discutir progresso...", importancia: 5, usuario_id: 1 });
+        const n2 = await Nota.create({ titulo: "Reunião com a equipe", texto: "Discutir progresso...", importancia: 5, usuario_id: users[0].id });
         await n2.addTags([tags[0], tags[2]]); // Trabalho, Urgente
 
         // Nota 3 (Alice)
-        const n3 = await Nota.create({ titulo: "Ligar para o encanador", texto: "Vazamento na cozinha", importancia: 4, usuario_id: 1 });
-        await n3.addTags([tags[1], tags[2]]); // Pessoal, Urgente
+        const n3 = await Nota.create({ titulo: "Ligar para o encanador", texto: "Vazamento na cozinha", importancia: 4, usuario_id: users[0].id });
+        await n3.addTags([tags[1], tags[2]]); 
 
         // Nota 4 (Ricardo)
-        const n4 = await Nota.create({ titulo: "Consulta médica", texto: "Check-up anual", importancia: 4, usuario_id: 2 });
-        await n4.addTag(tags[1]); // Pessoal
+        const n4 = await Nota.create({ titulo: "Consulta médica", texto: "Check-up anual", importancia: 4, usuario_id: users[1].id });
+        await n4.addTag(tags[1]); 
 
         // Nota 5 (Ricardo)
-        const n5 = await Nota.create({ titulo: "Preparar apresentação", texto: "Slides conferência", importancia: 5, usuario_id: 2 });
-        await n5.addTag(tags[0]); // Trabalho
+        const n5 = await Nota.create({ titulo: "Preparar apresentação", texto: "Slides conferência", importancia: 5, usuario_id: users[1].id });
+        await n5.addTag(tags[0]); 
 
         // Nota 6 (Ricardo)
-        const n6 = await Nota.create({ titulo: "Renovar seguro do carro", texto: "Verificar opções", importancia: 3, usuario_id: 2 });
-        await n6.addTag(tags[2]); // Urgente
+        const n6 = await Nota.create({ titulo: "Renovar seguro do carro", texto: "Verificar opções", importancia: 3, usuario_id: users[1].id });
+        await n6.addTag(tags[2]); 
 
         // Nota 7 (Mariana)
-        const n7 = await Nota.create({ titulo: "Planejar viagem", texto: "Reservar voos", importancia: 2, usuario_id: 3 });
-        await n7.addTag(tags[1]); // Pessoal
+        const n7 = await Nota.create({ titulo: "Planejar viagem", texto: "Reservar voos", importancia: 2, usuario_id: users[2].id });
+        await n7.addTag(tags[1]); 
 
         // Nota 8 (Mariana)
-        const n8 = await Nota.create({ titulo: "Pagar contas", texto: "Energia, água...", importancia: 4, usuario_id: 3 });
-        await n8.addTag(tags[2]); // Urgente
+        const n8 = await Nota.create({ titulo: "Pagar contas", texto: "Energia, água...", importancia: 4, usuario_id: users[2].id });
+        await n8.addTag(tags[2]); 
 
         // Nota 9 (Mariana)
-        const n9 = await Nota.create({ titulo: "Aula de yoga", texto: "Participar online", importancia: 1, usuario_id: 3 });
-        await n9.addTag(tags[1]); // Pessoal
+        const n9 = await Nota.create({ titulo: "Aula de yoga", texto: "Participar online", importancia: 1, usuario_id: users[2].id });
+        await n9.addTag(tags[1]); 
 
         res.redirect('/');
 
     } catch (error) {
         console.error("Erro ao gerar dados:", error);
-        res.status(500).send("Erro ao gerar dados de teste: " + error.message);
+        res.status(500).send("Erro ao gerar dados: " + error.message);
     }
 };
 
