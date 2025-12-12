@@ -160,6 +160,25 @@ exports.relatorios = async function(req, res) {
     }
 };
 
+// --- NOTAS IMPORTANTES (Adaptado para NoSQL) ---
+exports.importantes = async function(req, res) {
+    try {
+        // Busca notas com importância >= 4
+        // .sort({ importancia: -1 }) ordena decrescente (5, 4...)
+        const notas = await Nota.find({ importancia: { $gte: 4 } })
+            .sort({ importancia: -1 })
+            .lean();
+
+        res.render('importantes', {
+            titulo_pagina: "Notas Mais Importantes",
+            notas: notas
+        });
+
+    } catch (error) {
+        console.error("Erro notas importantes:", error);
+        res.status(500).send("Erro ao buscar notas importantes.");
+    }
+};
+
 // --- FUNÇÕES NÃO ADAPTADAS AINDA (Placeholders para não quebrar a rota) ---
-exports.importantes = (req, res) => res.send("Funcionalidade em manutenção para NoSQL");
 exports.criarDados = (req, res) => res.send("Povoamento desativado no NoSQL");
