@@ -216,3 +216,54 @@ exports.deleta = async function(req, res) {
         res.redirect('/');
     }
 };
+
+// --- RELATÓRIOS (Slide 58) ---
+exports.relatorios = async function(req, res) {
+    try {
+        // 1. Contagens Totais (Método count do Sequelize)
+        const totalUsuarios = await Usuario.count();
+        const totalNotas = await Nota.count();
+        const totalTags = await Tag.count();
+
+        // 2. Notas por Usuário
+        // Buscamos todos os usuários e incluímos suas notas para contar
+        const usuarios = await Usuario.findAll({ include: Nota });
+        
+        // Mapeamos para um objeto simples com nome e quantidade
+        const dadosUsuarios = usuarios.map(u => {
+            // Tenta acessar 'Notas' (padrão) ou 'Nota' (singular) ou array vazio
+            const notasDoUsuario = u.Notas || u.Nota || [];
+            return {
+                nome: `${u.nome} ${u.sobrenome || ''}`.trim(),
+                qtd: notasDoUsuario.length
+            };
+        });
+
+        // 3. Notas por Tag
+        const tags = await Tag.findAll({ include: Nota });
+        
+        const dadosTags = tags.map(t => {
+            // Tenta acessar 'Notas' (padrão) ou 'Nota' ou array vazio
+            const notasDaTag = t.Notas || t.Nota || [];
+            return {
+                tag: t.tag,
+                cor: t.cor,
+                qtd: notasDaTag.length
+            };
+        });
+
+        // Renderiza a view
+        res.render('relatorio', {
+            titulo_pagina: "Relatório do Sistema",
+            totalUsuarios,
+            totalNotas,
+            totalTags,
+            dadosUsuarios,
+            dadosTags
+        });
+
+    } catch (error) {
+        console.error("Erro ao gerar relatório:", error);
+        res.status(500).send("Erro ao gerar relatório");
+    }
+};

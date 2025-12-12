@@ -29,4 +29,7 @@ router.get('/lida/:id', controllerNota.lida);
 /* GET Marcar como Não Lida */
 router.get('/naolida/:id', controllerNota.naolida);
 
+// GET Relatório
+router.get('/relatorio', controllerNota.relatorios);
+
 module.exports = router;
