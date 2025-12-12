@@ -1,81 +1,35 @@
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('./server.js');
+const mongoose = require('./server.js');
 
-// --- MODELO USUARIO ---
-class Usuario extends Model { }
-Usuario.init({
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
-    nome: { type: DataTypes.STRING, allowNull: false },
-    sobrenome: { type: DataTypes.STRING, allowNull: true }, // Opcional
-    email: { type: DataTypes.STRING, allowNull: false }
+// Definição do Schema (Estrutura dos dados)
+const NotaSchema = new mongoose.Schema({
+    titulo: { 
+        type: String, 
+        required: true, 
+        maxLength: 128 
+    },
+    texto: { 
+        type: String, 
+        required: true 
+    },
+    importancia: { 
+        type: Number, 
+        required: true, 
+        min: 1, 
+        max: 5 
+    },
+    lida: { 
+        type: Boolean, 
+        default: false 
+    }
 }, {
-    sequelize,
-    freezeTableName: true,
-    createdAt: 'criada_em',
-    updatedAt: 'atualizada_em'
+    collection: 'nota', // Nome da coleção no MongoDB
+    timestamps: {
+        createdAt: 'criada_em', // Mapeia o padrão createdAt para 'criada_em'
+        updatedAt: 'atualizada_em' // Mapeia o padrão updatedAt para 'atualizada_em'
+    }
 });
 
-// --- MODELO NOTA ---
-class Nota extends Model { }
-Nota.init({
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
-    titulo: { type: DataTypes.STRING, unique: true, allowNull: false },
-    texto: { type: DataTypes.TEXT, allowNull: false },
-    importancia: { type: DataTypes.INTEGER, allowNull: false },
-    lida: { type: DataTypes.BOOLEAN, defaultValue: false }
-}, {
-    sequelize,
-    freezeTableName: true,
-    createdAt: 'criada_em',
-    updatedAt: 'atualizada_em'
-});
+// Cria o modelo 'Nota' com base no Schema
+const Nota = mongoose.model('Nota', NotaSchema);
 
-// --- MODELO TAG ---
-class Tag extends Model { }
-Tag.init({
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
-    tag: { type: DataTypes.STRING(32), allowNull: false, unique: true },
-    cor: { type: DataTypes.STRING(16), allowNull: true }
-}, {
-    sequelize,
-    freezeTableName: true,
-    createdAt: 'criada_em',
-    updatedAt: 'atualizada_em'
-});
-
-// --- RELACIONAMENTOS ---
-
-// 1 Usuario tem N Notas (1:N)
-Usuario.hasMany(Nota, {
-    foreignKey: { name: 'usuario_id', allowNull: false }, // Obrigatório
-    onDelete: 'CASCADE',
-    onUpdate: 'RESTRICT'
-});
-Nota.belongsTo(Usuario, {
-    foreignKey: { name: 'usuario_id', allowNull: false }
-});
-
-// 1 Nota tem N Tags (N:N)
-Nota.belongsToMany(Tag, {
-    through: 'Nota_Tag', // Tabela intermediária
-    foreignKey: 'nota_id',
-    otherKey: 'tag_id',
-    onDelete: 'CASCADE',
-    onUpdate: 'RESTRICT'
-});
-Tag.belongsToMany(Nota, {
-    through: 'Nota_Tag',
-    foreignKey: 'tag_id',
-    otherKey: 'nota_id'
-});
-
-// Sincronização
-// alter: true -> Altera a tabela existente para corresponder ao modelo.
-sequelize.sync({ alter: true }).then(() => {
-    console.log('Modelos sincronizados com o banco de dados.');
-}).catch((error) => {
-    console.error('Erro ao sincronizar:', error);
-});
-
-// Exporta todos os modelos
-module.exports = { Usuario, Nota, Tag };
+module.exports = Nota;
