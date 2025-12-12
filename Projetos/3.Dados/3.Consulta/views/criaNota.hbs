@@ -1,0 +1,29 @@
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <h2 class="mb-4">Criação de uma nova nota de texto</h2>
+
+    <form method='POST' action='/nota/cria' class="row g-3">
+      
+      <div class="col-md-2">
+        <label for="importancia" class="form-label">Importância</label>
+        <input type="number" class="form-control" name="importancia" id="importancia" min="1" max="5" value="1" required>
+      </div>
+
+      <div class="col-md-10">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" class="form-control" name="titulo" id="titulo" required>
+      </div>
+
+      <div class="col-12">
+        <label for="texto" class="form-label">Texto da Nota</label>
+        <textarea class="form-control" name="texto" id="texto" rows="5" required></textarea>
+      </div>
+
+      <div class="col-12 mt-4">
+        <button type="submit" class="btn btn-primary">Criar</button>
+        <a href="/" class="btn btn-secondary">Cancelar</a>
+      </div>
+
+    </form>
+  </div>
+</div>
