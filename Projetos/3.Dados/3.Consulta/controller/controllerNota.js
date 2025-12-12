@@ -125,7 +125,41 @@ exports.altera_post = async function(req, res) {
     }
 };
 
+// --- RELATÓRIOS (Adaptado para NoSQL) ---
+exports.relatorios = async function(req, res) {
+    try {
+        // 1. Total Geral
+        const totalNotas = await Nota.countDocuments({});
+
+        // 2. Por Importância (1 a 5)
+        // Criamos um objeto para armazenar as contagens
+        const porImportancia = {
+            imp1: await Nota.countDocuments({ importancia: 1 }),
+            imp2: await Nota.countDocuments({ importancia: 2 }),
+            imp3: await Nota.countDocuments({ importancia: 3 }),
+            imp4: await Nota.countDocuments({ importancia: 4 }),
+            imp5: await Nota.countDocuments({ importancia: 5 })
+        };
+
+        // 3. Por Status
+        const porStatus = {
+            lidas: await Nota.countDocuments({ lida: true }),
+            naolidas: await Nota.countDocuments({ lida: false })
+        };
+
+        res.render('relatorio', {
+            titulo_pagina: "Relatório de Notas Cadastradas",
+            totalNotas: totalNotas,
+            imp: porImportancia,
+            status: porStatus
+        });
+
+    } catch (error) {
+        console.error("Erro no relatório:", error);
+        res.status(500).send("Erro ao gerar relatório.");
+    }
+};
+
 // --- FUNÇÕES NÃO ADAPTADAS AINDA (Placeholders para não quebrar a rota) ---
-exports.relatorios = (req, res) => res.send("Funcionalidade em manutenção para NoSQL");
 exports.importantes = (req, res) => res.send("Funcionalidade em manutenção para NoSQL");
 exports.criarDados = (req, res) => res.send("Povoamento desativado no NoSQL");

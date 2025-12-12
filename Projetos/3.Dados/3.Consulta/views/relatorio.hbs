@@ -1,55 +1,53 @@
 <div class="container">
-    <h2 class="mb-4"><i class="bi bi-bar-chart-line"></i> Relatório de Dados Cadastrados</h2>
+    <h2 class="mb-4"><i class="bi bi-bar-chart-line"></i> {{titulo_pagina}}</h2>
 
     <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <h5 class="card-title border-bottom pb-2">Resumo Geral</h5>
-            <div class="row text-center mt-3">
-                <div class="col-md-4">
-                    <h3>{{totalUsuarios}}</h3>
-                    <p class="text-muted">Usuários Cadastrados</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>{{totalNotas}}</h3>
-                    <p class="text-muted">Notas Cadastradas</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>{{totalTags}}</h3>
-                    <p class="text-muted">Tags Cadastradas</p>
-                </div>
-            </div>
+        <div class="card-body text-center">
+            <h5 class="card-title text-muted">Notas Cadastradas</h5>
+            <h1 class="display-4 fw-bold">{{totalNotas}}</h1>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow-sm h-100">
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm">
                 <div class="card-header bg-light">
-                    <strong>Número de Notas por Usuário</strong>
+                    <strong><i class="bi bi-exclamation-triangle"></i> Número de Notas por Importância</strong>
                 </div>
                 <ul class="list-group list-group-flush">
-                    {{#each dadosUsuarios}}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-person"></i> {{this.nome}}</span>
-                        <span class="badge bg-primary rounded-pill">{{this.qtd}}</span>
+                        Nível 1 <span class="badge bg-secondary rounded-pill">{{imp.imp1}}</span>
                     </li>
-                    {{/each}}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Nível 2 <span class="badge bg-secondary rounded-pill">{{imp.imp2}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Nível 3 <span class="badge bg-warning text-dark rounded-pill">{{imp.imp3}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Nível 4 <span class="badge bg-warning text-dark rounded-pill">{{imp.imp4}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Nível 5 <span class="badge bg-danger rounded-pill">{{imp.imp5}}</span>
+                    </li>
                 </ul>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-sm h-100">
+        <div class="col-md-6 mb-3">
+            <div class="card h-100 shadow-sm">
                 <div class="card-header bg-light">
-                    <strong>Número de Notas por Tag</strong>
+                    <strong><i class="bi bi-check2-square"></i> Número de Notas por Status</strong>
                 </div>
                 <ul class="list-group list-group-flush">
-                    {{#each dadosTags}}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span style="color: {{this.cor}}"><i class="bi bi-tag-fill"></i> {{this.tag}}</span>
-                        <span class="badge bg-secondary rounded-pill">{{this.qtd}}</span>
+                        <span class="text-danger"><i class="bi bi-envelope-open"></i> Não Lida</span>
+                        <span class="badge bg-danger rounded-pill">{{status.naolidas}}</span>
                     </li>
-                    {{/each}}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="text-success"><i class="bi bi-envelope-fill"></i> Lida</span>
+                        <span class="badge bg-success rounded-pill">{{status.lidas}}</span>
+                    </li>
                 </ul>
             </div>
         </div>

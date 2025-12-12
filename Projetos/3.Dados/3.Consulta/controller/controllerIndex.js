@@ -9,11 +9,11 @@ exports.tela_principal = async function(req, res) {
         // Se for um POST com busca
         if (req.method === 'POST') {
             if (!termoBusca || termoBusca.trim() === '') {
-                // Se a busca estiver vazia, redireciona para limpar (Slide 33)
+                // Se a busca estiver vazia, redireciona para limpar
                 return res.redirect('/');
             }
 
-            // Pesquisa usando o índice de texto criado no modelo (Slide 20)
+            // Pesquisa usando o índice de texto criado no modelo
             notas = await Nota.find(
                 { $text: { $search: termoBusca } }
             ).lean();

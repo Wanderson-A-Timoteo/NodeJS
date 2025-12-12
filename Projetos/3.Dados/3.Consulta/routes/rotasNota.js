@@ -8,7 +8,7 @@ router.get('/gerar', controllerNota.criarDados);
 // Rota para Relatórios
 router.get('/relatorio', controllerNota.relatorios);
 
-// --- ROTA DE NOTAS IMPORTANTES ---
+// Rota para Notas Importantes
 router.get('/importantes', controllerNota.importantes);
 
 // Rotas de Criação
