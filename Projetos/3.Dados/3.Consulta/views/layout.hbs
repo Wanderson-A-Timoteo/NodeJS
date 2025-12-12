@@ -46,6 +46,11 @@
               <i class="bi bi-exclamation-circle-fill"></i> Notas Importantes
             </a>
           </li>
+          <li class="nav-item">
+            <button class="btn nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFiltro">
+              <i class="bi bi-funnel-fill"></i> Filtro
+            </button>
+          </li>
         </ul>
         <form class="d-flex ms-auto" action="/" method="POST">
           <input class="form-control me-2" type="search" name="busca" placeholder="Pesquisar por Título" aria-label="Search"
@@ -60,6 +65,54 @@
 
   <div class="container">
     {{{body}}}
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasFiltro">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title"><i class="bi bi-funnel"></i> Filtro de Notas</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form action="/" method="POST">
+          <input type="hidden" name="acao" value="filtrar">
+
+          <h6 class="mt-3">Estado da Nota</h6>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="lida" id="checkLida" {{#if filtro_lida}}checked{{/if}}>
+              <label class="form-check-label" for="checkLida">Lida</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="naolida" id="checkNaoLida" {{#if filtro_naolida}}checked{{/if}}>
+              <label class="form-check-label" for="checkNaoLida">Não Lida</label>
+          </div>
+
+          <h6 class="mt-4">Importância</h6>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="imp1" {{#if filtro_imp1}}checked{{/if}}>
+              <label class="form-check-label">1</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="imp2" {{#if filtro_imp2}}checked{{/if}}>
+              <label class="form-check-label">2</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="imp3" {{#if filtro_imp3}}checked{{/if}}>
+              <label class="form-check-label">3</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="imp4" {{#if filtro_imp4}}checked{{/if}}>
+              <label class="form-check-label">4</label>
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="imp5" {{#if filtro_imp5}}checked{{/if}}>
+              <label class="form-check-label">5</label>
+          </div>
+
+          <div class="d-grid gap-2 mt-5">
+              <button type="submit" class="btn btn-success">Filtrar</button>
+          </div>
+      </form>
+    </div>
   </div>
 
   <script src="/javascripts/bootstrap/bootstrap.bundle.min.js"></script>
