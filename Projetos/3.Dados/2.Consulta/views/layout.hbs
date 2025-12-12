@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>{{titulo_pagina}}</title>
+  <link rel='stylesheet' href='/stylesheets/bootstrap/bootstrap.min.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light mb-4" style="background-color: #cfe2ff;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-journal-text"></i> Notas
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/sobre">Sobre</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/nota/cria">Criar Nota</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/nota/gerar">
+              <i class="bi bi-database-add"></i> Criar Dados
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/nota/relatorio">
+              <i class="bi bi-graph-up"></i> Relatório
+            </a>
+          </li>
+        </ul>
+        <form class="d-flex ms-auto" action="/" method="POST">
+          <input class="form-control me-2" type="search" name="busca" placeholder="Pesquisar por Título" aria-label="Search"
+            value="{{termo}}">
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    {{{body}}}
+  </div>
+
+  <script src="/javascripts/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
