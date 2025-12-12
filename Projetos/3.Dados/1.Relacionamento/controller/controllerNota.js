@@ -90,37 +90,43 @@ exports.cria_post = async function(req, res) {
 // Cria e já exporta a função que será responsável pela consulta a nota
 exports.consulta = async function(req, res) {
     try {
-        // Pega o ID que vem na URL (ex: /nota/consulta/1)
         const id = req.params.id;
 
-        // Busca a nota no banco pelo ID (Primary Key)
-        const nota = await Nota.findByPk(id);
+        // Buscando Nota com seus RELACIONAMENTOS (JOIN)
+        const nota = await Nota.findByPk(id, {
+            include: [
+                { model: Usuario }, // Traz os dados do Usuário dono
+                { model: Tag }      // Traz a lista de Tags associadas
+            ]
+        });
 
-        // Se a nota existir, atualiza ela como lida e mostra na tela
         if (nota) {
-            // Atualiza o status para lida: true
-            await Nota.update(
-                { lida: true },
-                { where: { id: id } }
-            );
+            // Marca como lida
+            await Nota.update({ lida: true }, { where: { id: id } });
+
+            // Converte para objeto simples para o Handlebars
+            const notaSimples = nota.get({ plain: true });
 
             const contexto = {
                 titulo_pagina: "Consulta a Nota",
-                id: nota.id,
-                titulo: nota.titulo,
-                texto: nota.texto,
-                importancia: nota.importancia,
-                lida: true
+                // Passamos os dados diretos do objeto simples
+                id: notaSimples.id,
+                titulo: notaSimples.titulo,
+                texto: notaSimples.texto,
+                importancia: notaSimples.importancia,
+                lida: true,
+                // NOVOS DADOS PARA A VIEW:
+                usuario: notaSimples.Usuario, // Objeto usuário
+                tags: notaSimples.Tags        // Array de tags
             };
-
+            
             res.render('consultaNota', contexto);
         } else {
-            res.status(404).send("Nota não encontrada");
+            res.redirect('/');
         }
-
     } catch (error) {
         console.error("Erro na consulta:", error);
-        res.status(500).send("Erro ao consultar nota.");
+        res.redirect('/');
     }
 };
 

@@ -1,29 +1,61 @@
-<div class="card mt-4">
-  <div class="card-header">
-    Consulta a Informações da Nota
+<div class="card mt-4 shadow">
+  <div class="card-header bg-primary text-white">
+    <i class="bi bi-file-text"></i> Consulta a Informações da Nota
   </div>
   <div class="card-body">
-    <h5 class="card-title">{{titulo}}</h5>
-    <p class="card-text">{{texto}}</p>
+    
+    <h4 class="card-title mb-3">{{titulo}}</h4>
+    <p class="card-text fs-5" style="white-space: pre-line;">{{texto}}</p>
+    
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>ID:</strong> {{id}}</p>
+            <p><strong>Importância:</strong> 
+                <span class="badge bg-secondary">{{importancia}}</span>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Usuário:</strong> <i class="bi bi-person-circle"></i> {{usuario.nome}} {{usuario.sobrenome}}</p>
+            
+            <p><strong>Tags:</strong> 
+                {{#each tags}}
+                    <span class="badge rounded-pill" style="background-color: {{this.cor}}; color: #fff;">
+                        <i class="bi bi-tag-fill"></i> {{this.tag}}
+                    </span>
+                {{else}}
+                    <span class="text-muted fst-italic">Sem tags</span>
+                {{/each}}
+            </p>
+        </div>
+    </div>
 
     <hr>
-    <p class="card-text"><small class="text-muted">Chave: {{id}} | Importância: {{importancia}}</small></p>
 
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalExclusao">
-      Deletar
-    </button>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalExclusao">
+            <i class="bi bi-trash"></i> Deletar
+        </button>
 
-    <a href="/nota/altera/{{id}}" class="btn btn-success">Alterar</a>
-    <a href="/" class="btn btn-secondary">Voltar</a>
+        <a href="/nota/altera/{{id}}" class="btn btn-success">
+            <i class="bi bi-pencil"></i> Alterar
+        </a>
+        
+        <a href="/" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+    </div>
+
   </div>
 </div>
 
-<div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="modalExclusao" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel">Exclusão de Nota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Exclusão de Nota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         Deseja realmente excluir a nota <strong>"{{titulo}}"</strong>?
